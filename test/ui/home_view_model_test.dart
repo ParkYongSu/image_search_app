@@ -1,7 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:image_search_app/data/photo_repository.dart';
-import 'package:image_search_app/model/photo.dart';
-import 'package:image_search_app/ui/home_view_model.dart';
+import 'package:image_search_app/data/data_source/result.dart';
+import 'package:image_search_app/domain/repository/photo_repository.dart';
+import 'package:image_search_app/domain/model/photo.dart';
+import 'package:image_search_app/presentation/home/home_view_model.dart';
 
 void main() {
   test("HomeViewModel test", () async {
@@ -18,10 +19,10 @@ void main() {
 
 class TestApi implements PhotoRepository {
   @override
-  Future<List<Photo>> fetch(String query) async {
+  Future<Result<List<Photo>>> fetch(String query) async {
     await Future.delayed(const Duration(seconds: 3));
 
-    return testJson.map((e) => Photo.fromJson(e)).toList();
+    return Result.success(testJson.map((e) => Photo.fromJson(e)).toList());
   }
 }
 
