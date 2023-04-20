@@ -10,11 +10,8 @@ void main() {
     await viewModel.fetch("apple");
 
     expect(
-      viewModel.photoStream,
-      emitsInOrder([
-        equals([]),
-        equals(equals(testJson.map((e) => Photo.fromJson(e)).toList())),
-      ]),
+      viewModel.photos,
+      testJson.map((e) => Photo.fromJson(e)).toList(),
     );
   });
 }
