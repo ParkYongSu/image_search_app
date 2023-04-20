@@ -12,7 +12,6 @@ class PhotoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = PhotoProvider.of(context);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.0),

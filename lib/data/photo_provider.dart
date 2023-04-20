@@ -27,6 +27,6 @@ class PhotoProvider extends InheritedWidget {
 
   @override
   bool updateShouldNotify(PhotoProvider oldWidget) {
-    return viewModel.api != oldWidget.viewModel.api;
+    return viewModel.repository != oldWidget.viewModel.repository;
   }
 }
