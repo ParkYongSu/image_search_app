@@ -39,10 +39,11 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<HomeViewModel>();
+    final state = viewModel.state;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -72,22 +73,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   )),
             ),
           ),
-          Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(16.0),
-              gridDelegate:
-              const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisSpacing: 16.0,
-                mainAxisSpacing: 16.0,
-                crossAxisCount: 2,
-              ),
-              itemBuilder: (context, index) {
-                final photo = viewModel.photos[index];
-                return PhotoWidget(photo: photo);
-              },
-              itemCount: viewModel.photos.length,
-            ),
-          ),
+          state.isLoading
+              ? const CircularProgressIndicator()
+              : Expanded(
+                  child: GridView.builder(
+                    padding: const EdgeInsets.all(16.0),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisSpacing: 16.0,
+                      mainAxisSpacing: 16.0,
+                      crossAxisCount: 2,
+                    ),
+                    itemBuilder: (context, index) {
+                      final photo = state.photos[index];
+                      return PhotoWidget(photo: photo);
+                    },
+                    itemCount: state.photos.length,
+                  ),
+                ),
         ],
       ),
     );

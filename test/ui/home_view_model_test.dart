@@ -2,16 +2,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:image_search_app/data/data_source/result.dart';
 import 'package:image_search_app/domain/repository/photo_repository.dart';
 import 'package:image_search_app/domain/model/photo.dart';
+import 'package:image_search_app/domain/use_case/get_use_case.dart';
 import 'package:image_search_app/presentation/home/home_view_model.dart';
 
 void main() {
   test("HomeViewModel test", () async {
-    final viewModel = HomeViewModel(repository: (TestApi()));
+    final viewModel = HomeViewModel(useCase: GetUseCase(repository: TestApi()));
 
     await viewModel.fetch("apple");
 
     expect(
-      viewModel.photos,
+      viewModel.state.photos,
       testJson.map((e) => Photo.fromJson(e)).toList(),
     );
   });

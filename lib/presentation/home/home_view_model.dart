@@ -1,28 +1,34 @@
 import 'dart:async';
-import 'dart:collection';
 import 'package:flutter/material.dart';
-import 'package:image_search_app/domain/repository/photo_repository.dart';
-import 'package:image_search_app/domain/model/photo.dart';
+import 'package:image_search_app/domain/use_case/get_use_case.dart';
+import 'package:image_search_app/presentation/home/home_state.dart';
 import 'package:image_search_app/presentation/home/home_ui_event.dart';
 
 class HomeViewModel extends ChangeNotifier {
-  final PhotoRepository repository;
+  final GetUseCase useCase;
 
-  HomeViewModel({required this.repository});
+  HomeViewModel({required this.useCase});
 
-  List<Photo> _photos = [];
+  HomeState _homeState = HomeState(
+    photos: [],
+    isLoading: false,
+  );
+
   final StreamController<HomeUIEvent> _streamController = StreamController();
 
-  UnmodifiableListView<Photo> get photos => UnmodifiableListView(_photos);
+  HomeState get state => _homeState;
 
   Stream<HomeUIEvent> get stream => _streamController.stream;
 
   Future<void> fetch(String query) async {
-    final response = await repository.fetch(query);
+    _homeState = _homeState.copyWith(isLoading: true);
+    notifyListeners();
+
+    final response = await useCase.call(query);
 
     response.when(
       success: (photos) {
-        _photos = photos;
+        _homeState = _homeState.copyWith(photos: photos);
         notifyListeners();
       },
       error: (message) {
@@ -31,5 +37,8 @@ class HomeViewModel extends ChangeNotifier {
         );
       },
     );
+
+    _homeState = _homeState.copyWith(isLoading: false);
+    notifyListeners();
   }
 }
